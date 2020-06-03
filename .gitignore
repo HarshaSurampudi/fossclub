@@ -2,4 +2,3 @@ env/
 db.sqlite3
 fossclub/__pycache__/
 portal/__pycache__/
-portal/migrations
