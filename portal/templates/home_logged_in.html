@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<h1>Hi {{ username }}</h1>
+<ul>
+    {% for project in project_list %}
+        <li><a href="/project/{{ project.id }}">{{ project.name }}</a></li>
+{% endfor %}
+</ul>
+
+</body>
+</html>

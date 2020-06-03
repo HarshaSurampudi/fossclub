@@ -4,13 +4,21 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
+from .models import Project
 # Create your views here.
 from django.template import loader
 
 
 def index(request):
-    return HttpResponse("Welcome to FOSSClub")
+    if request.user.is_authenticated:
+        username = request.user.username
+        project_list = Project.objects.all()
+        context = {"project_list": project_list, "username": username}
+        template = loader.get_template('home_logged_in.html')
+        return HttpResponse(template.render(context, request))
+    template = loader.get_template('home.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
 
 def signup(request):
@@ -56,3 +64,15 @@ def login_request(request):
     context = {"form": form}
     template = loader.get_template('login.html')
     return HttpResponse(template.render(context, request))
+
+
+def project(request, project_id):
+    if request.user.is_authenticated:
+        proj = Project.objects.get(pk=project_id)
+        if proj is None:
+            return redirect('/')
+        context = {"proj":proj}
+        template = loader.get_template('project.html')
+        return HttpResponse(template.render(context, request))
+    else:
+        return redirect('/')
