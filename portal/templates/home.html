@@ -5,7 +5,17 @@
     <title>Home</title>
 </head>
 <body>
+{% if is_logged_in %}
+<h1>Hi {{ username }}</h1>
+    <a href="/logout">Logout</a>
+<ul>
+    {% for project in project_list %}
+        <li><a href="/project/{{ project.id }}">{{ project.name }}</a></li>
+{% endfor %}
+</ul>
+    {% else %}
 <h1>Hi there, Welcome to FOSSClub</h1>
 <p>Please <a href="/login">login</a> to continue</p>
+{% endif %}
 </body>
 </html>

@@ -10,14 +10,16 @@ from django.template import loader
 
 
 def index(request):
+    is_logged_in = False
     if request.user.is_authenticated:
+        is_logged_in = True
         username = request.user.username
         project_list = Project.objects.all()
-        context = {"project_list": project_list, "username": username}
-        template = loader.get_template('home_logged_in.html')
+        context = {"project_list": project_list, "username": username, "is_logged_in": is_logged_in}
+        template = loader.get_template('home.html')
         return HttpResponse(template.render(context, request))
     template = loader.get_template('home.html')
-    context = {}
+    context = {"is_logged_in": is_logged_in}
     return HttpResponse(template.render(context, request))
 
 
@@ -68,10 +70,11 @@ def login_request(request):
 
 def project(request, project_id):
     if request.user.is_authenticated:
+        is_logged_in = True;
         proj = Project.objects.get(pk=project_id)
         if proj is None:
             return redirect('/')
-        context = {"proj":proj}
+        context = {"proj":proj, "is_logged_in": is_logged_in}
         template = loader.get_template('project.html')
         return HttpResponse(template.render(context, request))
     else:
